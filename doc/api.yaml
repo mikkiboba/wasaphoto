@@ -91,32 +91,35 @@ components:
           type: integer
           minimum: 0
           example: 18
-    
     Stream:
       title: Stream of photos
-      type: array
-      items:
-        type: object
-        properties:
-          photo: { $ref: "#/components/schemas/Photo"}
-          info: {$ref: "#/components/schemas/PhotoInfo"}
+      type: object
+      properties:
+        array:
+          type: array
+          items:
+            type: object
+            properties:
+              photo: { $ref: "#/components/schemas/Photo" }
+              info: { $ref: "#/components/schemas/PhotoInfo" }
     Comment:
       type: object
       properties:
         comment:
           type: string
-          example: "Ma che foto è??"
+          example: "Bella foto11!!11!"
     CommentId:
       type: object
       properties:
         id: 
-          type: string
-          example: "comment193"
-
+          type: integer
+          example: 1
+security:
+  - bearerAuth: []
 paths:
   /session:
     post:
-      tags: ['login']
+      tags: ["login"]
       summary: Logs in the user
       description: |-
         If the user does not exist, it will be created,
@@ -133,7 +136,7 @@ paths:
                 name:
                   type: string
                   example: Maria
-                  pattern: 'ˆ.*?$'
+                  pattern: "ˆ.*?$"
                   minLength: 3
                   maxLength: 16
         required: true
@@ -287,6 +290,10 @@ paths:
       responses:
         200:
           description: Photo liked successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Photo"
         404:
           description: Photo not found
         405:
