@@ -40,64 +40,79 @@ components:
     User:
       tags: ['users']
       title: UserName
+      description: User's username information
       type: object
       properties:
         username: 
+          description: User's username
           type: string
           example: Mikki123
     PhotoInfo:
       tags: ['photo']
-      title: Information of a photo
+      title: PhotoInfo
+      description: Information of a photo
       type: object
       properties:
         id:
           $ref: "#/components/schemas/PhotoId"
-        data:
+        date:
+          description: Photo's upload date
           type: string
           format: date-time
         likes:
+          description: Photo's number of likes
           type: integer
           minimum: 0
         comments:
+          description: Photo's number of comments
           type: integer
           minimum: 0
     Photo:
       tags: ['photo']
+      description: Photo's details
       type: object
       properties:
         id:
           $ref: "#/components/schemas/PhotoId"
         photo: 
+          description: Photo's details
           type: string
           format: base64
     PhotoId:
       tags: ['photo']
       title: Photo's Id
+      description: Photo's ID
       type: object
       properties:
         photoId:
+          description: Photo's ID
           type: integer
           example: 19338
     Profile:
       tags: ['profile']
       title: User's profile
+      description: Informations about a user's profile
       type: object
       properties:
         followers:
+          description: Number of followers
           type: integer
           minimum: 0
           example: 100
         following:
+          description: Number of following
           type: integer
           minimum: 0
           example: 50
         photos:
+          description: Number of photos uploaded
           type: integer
           minimum: 0
-          example: 18
+          example: 16
     Stream:
       tags: ['photo']
       title: Stream of photos
+      descriptioin: Stream of photos (timeline)
       type: object
       properties:
         array:
@@ -109,16 +124,20 @@ components:
               info: { $ref: "#/components/schemas/PhotoInfo" }
     Comment:
       tags: ['photo']
+      description: Comment's text
       type: object
       properties:
         comment:
+          description: Comment's text
           type: string
           example: "Bella foto11!!11!"
     CommentId:
       tags: ['photo']
+      description: Comment's ID
       type: object
       properties:
         id: 
+          description: Comment's ID
           type: integer
           example: 1
 security:
