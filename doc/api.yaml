@@ -38,6 +38,7 @@ components:
       required: true
   schemas:
     User:
+      tags: ['users']
       title: UserName
       type: object
       properties:
@@ -45,6 +46,7 @@ components:
           type: string
           example: Mikki123
     PhotoInfo:
+      tags: ['photo']
       title: Information of a photo
       type: object
       properties:
@@ -59,8 +61,8 @@ components:
         comments:
           type: integer
           minimum: 0
-    
     Photo:
+      tags: ['photo']
       type: object
       properties:
         id:
@@ -69,6 +71,7 @@ components:
           type: string
           format: base64
     PhotoId:
+      tags: ['photo']
       title: Photo's Id
       type: object
       properties:
@@ -76,6 +79,7 @@ components:
           type: integer
           example: 19338
     Profile:
+      tags: ['profile']
       title: User's profile
       type: object
       properties:
@@ -92,6 +96,7 @@ components:
           minimum: 0
           example: 18
     Stream:
+      tags: ['photo']
       title: Stream of photos
       type: object
       properties:
@@ -103,12 +108,14 @@ components:
               photo: { $ref: "#/components/schemas/Photo" }
               info: { $ref: "#/components/schemas/PhotoInfo" }
     Comment:
+      tags: ['photo']
       type: object
       properties:
         comment:
           type: string
           example: "Bella foto11!!11!"
     CommentId:
+      tags: ['photo']
       type: object
       properties:
         id: 
