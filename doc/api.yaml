@@ -67,6 +67,19 @@ components:
           description: User's ID
           type: integer
           example: 1
+          minimum: 0
+    Username:
+      title: Username
+      description: User's username
+      type: object
+      properties:
+        username:
+          description: User's username
+          type: string
+          example: Mikki
+          pattern: ^[a-zA-Z0-9]*$
+          minLength: 3
+          maxLength: 16
     PhotoInfo:
       title: PhotoInfo
       description: Information about a photo
@@ -95,11 +108,34 @@ components:
           description: Photo's ID
           type: integer
           example: 1
+          minimum: 0
+    Photo:
+      title: Photo
+      description: Photo
+      properties:
+        info:
+          $ref: "#/components/schemas/PhotoInfo"
+        image:
+          description: Photo's image
+          type: string
+          format: base64
+          pattern: ^data:image\/(?:gif|png|jpeg|bmp|webp)(?:;charset=utf-8)?;base64,(?:[A-Za-z0-9]|[+/])+={0,2}$
+    StreamId:
+      title: StreamId
+      description: A user's stream's ID
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          minimum: 0
     Stream:
       title: Stream
       description: Stream of photos (timeline)
       type: object
       properties:
+        id:
+          $ref: "#/components/schemas/StreamId"
         user:
           $ref: "#/components/schemas/UserId"
         array:
@@ -117,6 +153,7 @@ components:
         id:
           type: integer
           example: 1
+          minimum: 0
     Comment:
       title: Comment
       description: Comment
@@ -126,6 +163,7 @@ components:
           $ref: "#/components/schemas/CommentId"
         text:
           type: string
+          minLength: 1
           maxLength: 250
         user:
           $ref: "#/components/schemas/UserId"
@@ -137,6 +175,7 @@ components:
         id:
           type: integer
           example: 1
+          minimum: 0
     Like:
       title: Like
       description: Like
@@ -156,6 +195,7 @@ components:
         $id:
           type: integer
           example: 1
+          minimum: 0
     Ban:
       title: Ban
       description: Ban
@@ -175,6 +215,7 @@ components:
         id:
           type: integer
           example: 1
+          minimum: 0
     Follow:
       title: Follow
       description: Follow between two users
@@ -204,14 +245,7 @@ paths:
         content:
          application/json:
           schema:
-           type: object
-           properties:
-            name:
-              type: string 
-              example: Maria
-              pattern: 'ˆ.*?$'
-              minLength: 3
-              maxLength: 16
+            $ref: "#/components/schemas/Username"
         required: true
       responses:
        '201':
@@ -235,6 +269,12 @@ paths:
       operationId: setMyUserName
       summary: Set the username
       description: Set the user's username with the specified one
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Username"
+        required: true
       responses:
         '204':
           description: Username set successfully
@@ -270,7 +310,7 @@ paths:
               $ref: "#/components/schemas/PhotoInfo"
           image/png:
             schema:
-              $ref: "#/components/schemas/Stream"
+              $ref: "#/components/schemas/Photo"
       responses:
         '201':
           description: Photo uploaded succesfully
@@ -351,8 +391,12 @@ paths:
       summary: Comment a photo
       description: Comment a photo
       responses:
-        '204':
+        '201':
           description: Photo commented successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentId"
 
   /profile/{userid}/stream/{photoid}/comments/{commentid}:
     parameters:
@@ -437,3 +481,8 @@ paths:
       responses:
         '204':
           description: User unbanned successfully
+
+  
+
+
+      
