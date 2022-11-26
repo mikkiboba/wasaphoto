@@ -3,6 +3,12 @@ info:
   title: WASAPHOTO APIs
   version: 1.0.0
 
+tags:
+  - name: Login
+    description: Login actions
+  - name: Profile
+    description: User's actions
+
 components:
   securitySchemes:
     bearerAuth:
@@ -91,6 +97,9 @@ components:
           description: Photo's upload date
           type: string
           format: date-time
+          example: "2021-01-30T08:30:00Z"
+          minLength: 20
+          maxLength: 20
         likes:
           description: Photo's number of likes 
           type: integer
@@ -120,12 +129,15 @@ components:
           type: string
           format: base64
           pattern: ^data:image\/(?:gif|png|jpeg|bmp|webp)(?:;charset=utf-8)?;base64,(?:[A-Za-z0-9]|[+/])+={0,2}$
+          minLength: 0
+          maxLength: 1000
     StreamId:
       title: StreamId
       description: A user's stream's ID
       type: object
       properties:
         id:
+          description: The Stream's ID
           type: integer
           example: 1
           minimum: 0
@@ -139,7 +151,10 @@ components:
         user:
           $ref: "#/components/schemas/UserId"
         array:
+          description: Content of the stream
           type: array
+          minItems: 0
+          maxItems: 100
           items:
             type: object
             properties:
@@ -151,82 +166,10 @@ components:
       type: object
       properties:
         id:
+          description: The comment's ID
           type: integer
           example: 1
           minimum: 0
-    Comment:
-      title: Comment
-      description: Comment
-      type: object
-      properties:
-        id: 
-          $ref: "#/components/schemas/CommentId"
-        text:
-          type: string
-          minLength: 1
-          maxLength: 250
-        user:
-          $ref: "#/components/schemas/UserId"
-    LikeId:
-      title: LikeId
-      description: Like's ID
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-          minimum: 0
-    Like:
-      title: Like
-      description: Like
-      type: object
-      properties:
-        id:
-          $ref: "#/components/schemas/LikeId"
-        photo:
-          $ref: "#/components/schemas/PhotoId"
-        user:
-          $ref: "#/components/schemas/UserId"
-    BanId:
-      title: BanId
-      description: Ban's ID
-      type: object
-      properties:
-        $id:
-          type: integer
-          example: 1
-          minimum: 0
-    Ban:
-      title: Ban
-      description: Ban
-      type: object
-      properties:
-        id:
-          $ref: "#/components/schemas/BanId"
-        user:
-          $ref: "#/components/schemas/UserId"
-        banneduser:
-          $ref: "#/components/schemas/UserId"
-    FollowId:
-      title: FollowId
-      description: Follow's ID
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-          minimum: 0
-    Follow:
-      title: Follow
-      description: Follow between two users
-      type: object
-      properties:
-        id:
-          $ref: "#/components/schemas/FollowId"
-        user:
-          $ref: "#/components/schemas/UserId"
-        userfollowed:
-          $ref: "#/components/schemas/UserId"
 security:
   - bearerAuth: []
 
@@ -253,13 +196,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                identifier:
-                # change here if you decide to use an integer
-                # or any other type of identifier
-                  type: string
-                  example: "abcdef012345"
+              $ref: "#/components/schemas/UserId"
 
   /profile/{userid}:
     parameters:
@@ -279,7 +216,7 @@ paths:
         '204':
           description: Username set successfully
         '404':
-          description: Username not valid
+          description: User not found
     
     get:
       tags: ['profile']
@@ -344,34 +281,20 @@ paths:
       responses:
         '204':
           description: Photo deleted succesfully
-  
-  /profile/{userid}/stream/{photoid}/likes:
-    parameters:
-      - $ref: "#/components/parameters/UserID"
-      - $ref: "#/components/parameters/PhotoID"
-    put:
-      tags: ['profile']
-      operationId: likePhoto
-      summary: Like a photo
-      description: Like a photo
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PhotoInfo"
-      responses:
-        '201':
-          description: Photo liked successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LikeId"
-  
+
   /profile/{userid}/stream/{photoid}/likes/{likeid}:
     parameters:
       - $ref: "#/components/parameters/UserID"
       - $ref: "#/components/parameters/PhotoID"
       - $ref: "#/components/parameters/LikeID"
+    put:
+      tags: ['profile']
+      operationId: likePhoto
+      summary: Like a photo
+      description: Put a like to a photo
+      responses:
+        '204':
+          description: Photo liked successfully
     delete:
       tags: ['profile']
       operationId: unlikePhoto
@@ -385,7 +308,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/UserID"
       - $ref: "#/components/parameters/PhotoID"
-    put:
+    post:
       tags: ['profile']
       operationId: commentPhoto
       summary: Comment a photo
@@ -411,34 +334,19 @@ paths:
       responses:
         '204': 
           description: Comment deleted successfully
-
-  /profile/{userid}/following:
-    parameters:
-      - $ref: "#/components/parameters/UserID"
-    put:
-      tags: ['profile']
-      operationId: followUser
-      summary: Follow a user
-      description: Add a user to the list of following
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserId"
-      responses:
-        '201':
-          description: User followed succesfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FollowId"
-        '404':
-          description: User not found
   
   /profile/{userid}/following/{followid}:
     parameters:
       - $ref: "#/components/parameters/UserID"
       - $ref: "#/components/parameters/FollowID"
+    put:
+      tags: ['profile']
+      operationId: followUser
+      summary: Follow a user
+      description: Add a user to the list of following
+      responses:
+        '204':
+          description: User followed successfully
     delete:
       tags: ['profile']
       operationId: unfollowUser
@@ -447,32 +355,19 @@ paths:
       responses:
         '204':
           description: User unfollowed successfully
-
-  /profile/{userid}/ban:
-    parameters:
-      - $ref: "#/components/parameters/UserID"
-    put:
-      tags: ['profile']
-      operationId: banUser
-      summary: Ban a user
-      description: Ban (block) a user
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserId"
-      responses:
-        '201':
-          description: User banned successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/BanId"
   
   /profile/{userid}/ban/{banid}:
     parameters:
       - $ref: "#/components/parameters/UserID"
       - $ref: "#/components/parameters/BanID"
+    put:
+      tags: ['profile']
+      operationId: banUser
+      summary: Ban a user
+      description: Ban (block) a user
+      responses:
+        '204':
+          description: user banned successfully
     delete:
       tags: ['profile']
       operationId: unbanUser
@@ -481,8 +376,3 @@ paths:
       responses:
         '204':
           description: User unbanned successfully
-
-  
-
-
-      
