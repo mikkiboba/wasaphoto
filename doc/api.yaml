@@ -4,9 +4,9 @@ info:
   version: 1.0.0
 
 tags:
-  - name: Login
+  - name: login
     description: Login actions
-  - name: Profile
+  - name: profile
     description: User's actions
 
 components:
@@ -86,12 +86,22 @@ components:
           pattern: ^[a-zA-Z0-9]*$
           minLength: 3
           maxLength: 16
+    PhotoId:
+      title: PhotoId
+      description: Photo's Id
+      type: object
+      properties:
+        id:
+          description: Photo's ID
+          type: integer
+          example: 1
+          minimum: 0
     PhotoInfo:
       title: PhotoInfo
       description: Information about a photo
       type: object
       properties:
-        id:
+        p_id:
           $ref: "#/components/schemas/PhotoId"
         date:
           description: Photo's upload date
@@ -107,16 +117,6 @@ components:
         comments:
           description: Photo's number of comments
           type: integer
-          minimum: 0
-    PhotoId:
-      title: PhotoId
-      description: Photo's Id
-      type: object
-      properties:
-        id:
-          description: Photo's ID
-          type: integer
-          example: 1
           minimum: 0
     Photo:
       title: Photo
@@ -146,7 +146,7 @@ components:
       description: Stream of photos (timeline)
       type: object
       properties:
-        id:
+        s_id:
           $ref: "#/components/schemas/StreamId"
         user:
           $ref: "#/components/schemas/UserId"
