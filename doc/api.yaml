@@ -67,9 +67,8 @@ components:
       maxLength: 10
     Token:
       type: string
-      patter: "^[a-z8-9-]*$"
+      pattern: "^[a-z8-9-]*$"
       description: User's auth token. Also used as the identifier
-      example: "98c659ab-5b48-4fb9-9160-c04d0d171aaa"
       minLength: 36
       maxLength: 36
     ErrorMsg:
@@ -85,17 +84,14 @@ components:
         numposts:
           description: Number of photos posted by the user
           type: integer
-          min: 0
           example: 10
         numfollowers:
           description: Number of people who follow the user
           type: integer
-          min: 0
           example: 10
         numfollowing:
           description: Number of people who the user is following
           type: integer
-          min: 0
           example: 10
     Photo:
       description: Photo's info
@@ -117,35 +113,51 @@ components:
         hour:
           description: The hour in which the photo has been posted
           type: string
-          format: time
           example: "10:30"
           minLength: 5
           maxLength: 5
         numlikes:
           description: The number of likes of a photo
           type: integer
-          min: 0
           example: 10
         numcomments:
           description: The number of comments of a photo
           type: integer
-          min: 0
           example: 10
     Stream:
       description: A user's stream
       type: array
       items:
         $ref: "#/components/schemas/Photo"
+      minItems: 0
+      maxItems: 100
     PostID:
       description: A post's id
       type: integer
-      min: 0
+      example: 10
+    CommentID:
+      description: A comment's id
+      type: integer
       example: 10
   parameters:
     Username:
       name: username
       in: path
       description: user's username
+      required: true
+      schema:
+        $ref: "#/components/schemas/Username"
+    Followname:
+      name: followname
+      in: path
+      description: user's username to follow
+      required: true
+      schema:
+        $ref: "#/components/schemas/Username"
+    Banname:
+      name: banname
+      in: path
+      description: user's username to ban
       required: true
       schema:
         $ref: "#/components/schemas/Username"
@@ -156,6 +168,13 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/PostID"
+    CommentID:
+      name: commentid
+      in: path
+      description: a comment's id
+      required: true
+      schema:
+        $ref: "#/components/schemas/CommentID"
 security:
   - BearerAuth: []
 paths:
@@ -194,14 +213,14 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}:
+      parameters:
+        - $ref: "#/components/parameters/Username"
       put:
         operationId: setMyUserName
         tags: ["user actions"]
         summary: Change the user's username
         description: |
           Set a new username for the user if it's not already taken.
-        parameters:
-          - $ref: "#/components/parameters/Username"
         requestBody:
           description: User's username
           content:
@@ -224,10 +243,8 @@ paths:
         summary: Get the user's profile info
         description: |
           Get the info about the user's profile.
-        parameters:
-          - $ref: "#/components/parameters/Username"
         responses:
-          "201":
+          "200":
             description: User's info successfully obtained
             content:
               application/json:
@@ -242,16 +259,16 @@ paths:
           "500":
             $ref: "#/components/responses/InternalServerError"
   /users/{username}/stream:
+    parameters:
+        - $ref: "#/components/parameters/Username"
     get:
       operationId: getMyStream
       tags: ["user actions"]
       summary: Get the user's stream
       description: |
         Get the stream of the user (photos posted by other people) in reverse chronological order
-      parameters:
-        - $ref: "#/components/parameters/Username"
       responses:
-        "201":
+        "200":
           description: User's stream successfully obtained
           content:
             application/json:
@@ -262,14 +279,14 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts:
+    parameters:
+      - $ref: "#/components/parameters/Username"  
     post:
       operationId: uploadPhoto
       tags: ["post actions"]
       summary: Upload a photo
       description: |
         Upload a photo inserting it into the database
-      parameters:
-        - $ref: "#/components/parameters/Username"
       requestBody:
         content:
           multipart/form-data:
@@ -281,28 +298,35 @@ paths:
               maxLength: 268435456
         required: true
       responses:
-        "204":
+        "201":
           description: "Photo uploaded successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostID"
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}:
+    parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
     delete:
       operationId: deletePhoto
       tags: ["post actions"]
       summary: Delete a photo
       description: |
         Delete a photo uploaded
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
         "204":
           description: "Photo deleted successfully"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/follows/{followname}:
+    parameters:
+          - $ref: "#/components/parameters/Username"
+          - $ref: "#/components/parameters/Followname"
     put:
       security: []
       operationId: followUser
@@ -310,9 +334,6 @@ paths:
       summary: Follow a user
       description: |
         Follow a user
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/Username"
       responses:
         "204":
           description: User followed successfully
@@ -326,9 +347,6 @@ paths:
       summary: Unfollow a user
       description: |
         Unfollow a user
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/Username"
       responses:
         "204":
           description: User unfollowed successfully
@@ -337,15 +355,15 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/bans/{banname}:
+    parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/Banname"
     put:
       operationId: banUser
       tags: ["ban actions"]
       summary: Ban a user
       description: |
         Ban a user
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/Username"
       responses:
         "204":
           description: User banned successfully
@@ -359,9 +377,6 @@ paths:
       summary: Unban a user
       description: |
         Unban a user
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/Username"
       responses:
         "204":
           description: User unbanned successfully
@@ -370,15 +385,15 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}/likes:
+    parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
     put:
       operationId: likePhoto
       tags: ["like actions"]
       summary: Like a photo
       description: |
         Like a photo
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
         "204":
           description: Photo liked successfully
@@ -389,14 +404,11 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
     delete:
-      operationId: unikePhoto
+      operationId: unlikePhoto
       tags: ["like actions"]
       summary: Unlike a photo
       description: |
         Unlike a photo
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
         "204":
           description: Photo unliked successfully
@@ -407,31 +419,35 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}/comments:
+    parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
     post:
       operationId: commentPhoto
       tags: ["comment actions"]
       summary: Comment a photo
       description: |
         Comment a photo
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
-        "204":
-          description: Photo unliked successfully
+        "201":
+          description: Photo commented successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentID"
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/comments/{commentid}:
+    parameters:
+      - $ref: "#/components/parameters/CommentID"
     delete:
       operationId: uncommentPhoto
       tags: ["comment actions"]
       summary: Uncomment a photo
       description: |
         Uncomment a photo
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
         "204":
           description: Photo unliked successfully
