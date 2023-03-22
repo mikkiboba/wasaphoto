@@ -8,7 +8,7 @@ import (
 func (rt *_router) Handler() http.Handler {
 
 	// Session routes
-	rt.router.GET("/session", rt.wrap(rt.login))
+	rt.router.POST("/session", rt.wrap(rt.login))
 
 	// User routes
 	rt.router.PUT("/users/:username", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.setMyUsername))))
@@ -30,8 +30,8 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:username/bans/:banname", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unbanUser))))
 
 	// Like routes
-	rt.router.PUT("/users/:username/posts/:postid/likes", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.likePhoto))))
-	rt.router.DELETE("/users/:username/posts/:postid/likes", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unlikePhoto))))
+	rt.router.PUT("/users/:username/likes/:postliked", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.likePhoto))))
+	rt.router.DELETE("/users/:username/likes/:postliked", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unlikePhoto))))
 
 	// Comment routes
 	rt.router.POST("/users/:username/posts/:postid/comments", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.comment))))

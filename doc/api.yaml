@@ -62,7 +62,7 @@ components:
       type: string
       pattern: '.*'
       description: User's username
-      example: "Pollo Palla"
+      example: "PolloPalla"
       minLength: 3
       maxLength: 10
     Token:
@@ -74,7 +74,7 @@ components:
     ErrorMsg:
       description: Error message
       type: string
-      example: "There is an error with the database."
+      example: "Error"
     UserInfo:
       description: User's info
       type: object
@@ -384,7 +384,7 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /users/{username}/posts/{postid}/likes:
+  /users/{username}/likes/{postliked}:
     parameters:
         - $ref: "#/components/parameters/Username"
         - $ref: "#/components/parameters/PostID"
@@ -441,6 +441,8 @@ paths:
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}/comments/{commentid}:
     parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
       - $ref: "#/components/parameters/CommentID"
     delete:
       operationId: uncommentPhoto

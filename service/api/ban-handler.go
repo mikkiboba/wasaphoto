@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"errors"
 	"net/http"
 
@@ -119,7 +120,12 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 
 	// Delete all comments on the user's posts
 	err = rt.db.DeleteCommentsBan(uid, bid)
-	if err != nil {
+	if errors.Is(err, sql.ErrNoRows) {
+		rt.baseLogger.WithError(err).Error("One of the users cannot be found.")
+		w.WriteHeader(http.StatusNotFound)
+		Rollback(rt, w)
+		return
+	} else if err != nil {
 		rt.baseLogger.WithError(err).Error("There is an error while deleting all the comments of the banned user")
 		w.WriteHeader(http.StatusInternalServerError)
 		Rollback(rt, w)
@@ -127,7 +133,12 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 	}
 
 	err = rt.db.DeleteCommentsBan(bid, uid)
-	if err != nil {
+	if errors.Is(err, sql.ErrNoRows) {
+		rt.baseLogger.WithError(err).Error("One of the users cannot be found.")
+		w.WriteHeader(http.StatusNotFound)
+		Rollback(rt, w)
+		return
+	} else if err != nil {
 		rt.baseLogger.WithError(err).Error("There is an error while deleting all the comments of the banning user")
 		w.WriteHeader(http.StatusInternalServerError)
 		Rollback(rt, w)

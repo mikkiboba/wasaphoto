@@ -19,7 +19,7 @@ func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprout
 	username := ps.ByName("username")
 
 	// Get the post id from the parameters
-	postID := ps.ByName("postid")
+	postID := ps.ByName("postliked")
 
 	// Get the id of the user liking the photo
 	uid, err := rt.db.GetToken(username)
@@ -105,7 +105,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 	username := ps.ByName("username")
 
 	// Get the post id from the parameters
-	postID := ps.ByName("postid")
+	postID := ps.ByName("postliked")
 
 	// Get the id of the user unliking the photo
 	uid, err := rt.db.GetToken(username)
