@@ -384,7 +384,7 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /users/{username}/likes/{postliked}:
+  /users/{username}/likes/{postid}:
     parameters:
         - $ref: "#/components/parameters/Username"
         - $ref: "#/components/parameters/PostID"
