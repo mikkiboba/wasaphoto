@@ -27,6 +27,10 @@ func (db *appdbimpl) GetStream(followingList []string) ([]Post, error) {
 			return nil, err
 		}
 		posts = append(posts, post)
+
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 	if len(posts) == 0 {
 		return nil, sql.ErrNoRows
