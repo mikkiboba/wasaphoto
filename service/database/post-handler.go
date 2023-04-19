@@ -11,8 +11,6 @@ func (db *appdbimpl) UploadPhoto(user string, filename string) error {
 		return err
 	}
 
-	// ciao commento
-
 	affected, err := res.RowsAffected()
 	if err != nil {
 		return err
