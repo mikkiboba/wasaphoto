@@ -1,0 +1,126 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #bcb8eb;
+}
+
+.ownbtn {
+  background-color: #b8cbe4;
+  color: white;
+  border-color: white;
+}
+.ownbtn:hover {
+ background-color: #b6dde7;
+ border-color: white;
+}
+
+.ownbanbtn {
+  background-color: white;
+  border-color: #ff6961;
+  color: #ff6961;
+}
+
+.like:hover, .comment:hover {
+  -webkit-filter: drop-shadow(1px 1px 1px #222);
+  filter: drop-shadow(1px 1px 1px #222);
+}
+
+.ownunfollowbtn {
+  background-color: #ceb8e4;
+  color: white;
+  border-color: white;
+}
+
+.ownunfollowbtn:hover {
+  background-color: #d48be5;
+  border-color: white;
+ }
+
+.ownbanbtn:hover {
+  background-color: #ff6961;
+  border-color: white;
+  color:white;
+}
+
+.ownunbanbtn {
+  background-color: rgb(251, 209, 119);
+  color: white;
+  border-color: white;
+}
+
+.ownunbanbtn:hover {
+  background-color: rgb(251, 209, 119);
+  
+}
+
+.ownimg:hover {
+  filter: drop-shadow(1px 1px 1px #1a1a1a24);
+}
+
+.ownbtnname {
+  background-color: rgb(153, 180, 153);
+  border-color: white;
+  color: white;
+}
+
+.ownbtnname:hover {
+  background-color: white;
+  border-color: rgb(153, 180, 153);
+  color: black;
+}
+
+.ownviewbtn {
+  background-color: rgb(166, 199, 180);
+  border-color: #bcb8eb;
+  color: white;
+}
+
+.ownunderline:hover {
+  text-decoration: underline;
+}
+
+.ownunderline:active {
+  -webkit-filter: drop-shadow(1px 1px 1px #222);
+  filter: drop-shadow(1px 1px 1px #222);
+}
+
+.ownviewbtn:hover {
+  background-color: white;
+  border-color: rgb(166, 199, 180);
+  color: black
+}
+
+.profilelink {
+  color: black;
+}
+
+.profilelink:hover {
+  color: rgb(138, 138, 138);
+}
+
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

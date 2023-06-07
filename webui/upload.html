@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Example app</title>
+	<meta charset="UTF-8">
+	<link rel="icon" href="/favicon.ico"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./public/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="./src/assets/style.css">
+
+</head>
+<body>
+
+    <div class="container bg-light py-3 text-center w-25 rounded-3 shadow">
+		<h3 class="fw-light">Upload your photo</h3><br>
+		<form action="upload.php" method="POST" enctype="multipart/form-data">
+			<div class="form-group">
+			  <label for="photo" class="form-label">Select a photo:</label>
+			  <input type="file" class="form-control" id="photo" name="photo">
+			</div><br>
+			<button type="submit" class="btn btn-primary ownbtn">Upload</button>
+		</form><br>
+		<div v-if="previewImage">
+			<img class="card-img-top" :src="previewImage" alt="" />
+		</div>
+	</div>
+
+
+<script src="./public/bootstrap/js/bootstrap.bundle.js"></script>
+<script type="module" src="src/main.js"></script>
+</body>
+
+<style>
+</style>
+
+  
+
+</html>

@@ -1,0 +1,22 @@
+# specify parent image
+FROM node:lts AS builder
+
+# specify a working directory
+WORKDIR /app
+
+# copy Vue.js code
+COPY webui webui
+
+# change working directory
+WORKDIR /app/webui
+
+# build Vue.js into plain HTML/CSS/JS
+RUN npm run build-prod
+
+# create final container
+FROM nginx:stable
+
+# copy the (built) app from the builder image
+COPY --from=builder /app/webui/dist /usr/share/nginx/html
+
+# CMD and EXPOSE already present in nginx:stable container, no need to repeat

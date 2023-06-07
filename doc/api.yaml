@@ -1,0 +1,441 @@
+openapi: 3.0.0
+info:
+  title: WASAPhotos
+  version: "2.0"
+  description: |
+    API for the project submitted for the WASA course.
+    Users can log in, register, upload photos, comment photos, like photos, follow each other and ban each other.
+    Github link : [...]
+tags:
+  - name: login actions
+    description: login and registration
+  - name: user actions
+    description: change username, get the profile info, get the stream
+  - name: post actions
+    description: upload and delete a photo
+  - name: follow actions
+    description: follow and unfollow a user
+  - name: ban actions
+    description: ban and unban a user
+  - name: like actions
+    description: like and unlike a photo
+  - name: comment actions
+    description: comment and uncomment a photo
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMsg"
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMsg"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMsg"
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMsg"
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMsg"
+  schemas:
+    Username:
+      type: string
+      pattern: '.*'
+      description: User's username
+      example: "Pollo Palla"
+      minLength: 3
+      maxLength: 10
+    Token:
+      type: string
+      patter: "/^[a-z0-9]+$/i"
+      description: User's auth token. Also used as the identifier
+      example: "98c659ab-5b48-4fb9-9160-c04d0d171aaa"
+      minLength: 36
+      maxLength: 36
+    ErrorMsg:
+      description: Error message
+      type: string
+      example: "There is an error with the database."
+    UserInfo:
+      description: User's info
+      type: object
+      properties:
+        username:
+          $ref: "#/components/schemas/Username"
+        numposts:
+          description: Number of photos posted by the user
+          type: integer
+          min: 0
+          example: 10
+        numfollowers:
+          description: Number of people who follow the user
+          type: integer
+          min: 0
+          example: 10
+        numfollowing:
+          description: Number of people who the user is following
+          type: integer
+          min: 0
+          example: 10
+    Photo:
+      description: Photo's info
+      type: object
+      properties:
+        id:
+          description: Photo's id
+          type: integer
+          example: 1
+        user:
+          $ref: "#/components/schemas/Token"
+        date:
+          description: The date in which the photo has been posted
+          type: string
+          format: date
+          example: "2000-01-01"
+          minLength: 10
+          maxLength: 10
+        hour:
+          description: The hour in which the photo has been posted
+          type: string
+          format: time
+          example: "10:30"
+          minLength: 5
+          maxLength: 5
+        numlikes:
+          description: The number of likes of a photo
+          type: integer
+          min: 0
+          example: 10
+        numcomments:
+          description: The number of comments of a photo
+          type: integer
+          min: 0
+          example: 10
+    Stream:
+      description: A user's stream
+      type: array
+      items:
+        $ref: "#/components/schemas/Photo"
+    PostID:
+      description: A post's id
+      type: integer
+      min: 0
+      example: 10
+  parameters:
+    Username:
+      name: username
+      in: path
+      description: user's username
+      required: true
+      schema:
+        $ref: "#/components/schemas/Username"
+    PostID:
+      name: postid
+      in: path
+      description: a post's id
+      required: true
+      schema:
+        $ref: "#/components/schemas/PostID"
+security:
+  - BearerAuth: []
+paths:
+  /session:
+    post:
+      security: []
+      tags: ["login actions"]
+      summary: Log in the user
+      description: |
+        Get the username and logs in the user if the username is in the database.
+        If not, it registrates the user adding the username into the database.
+        It returns the authorization token.
+      operationId: doLogin
+      requestBody:
+        description: User's username
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Username"
+        required: true
+      responses:
+        "200":
+          description: User successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        "201":
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}:
+      put:
+        operationId: setMyUserName
+        tags: ["user actions"]
+        summary: Change the user's username
+        description: |
+          Set a new username for the user if it's not already taken.
+        parameters:
+          - $ref: "#/components/parameters/Username"
+        requestBody:
+          description: User's username
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Username"
+          required: true
+        responses:
+          "204":
+            description: Username updated successfully
+          "400":
+            $ref: "#/components/responses/BadRequest"
+          "409":
+            $ref: "#/components/responses/Conflict"          
+          "500":
+            $ref: "#/components/responses/InternalServerError"
+      get:
+        operationId: getUserProfile
+        tags: ["user actions"]
+        summary: Get the user's profile info
+        description: |
+          Get the info about the user's profile.
+        parameters:
+          - $ref: "#/components/parameters/Username"
+        responses:
+          "201":
+            description: User's info successfully obtained
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UserInfo"
+          "400":
+            $ref: "#/components/responses/BadRequest"
+          "403":
+            $ref: "#/components/responses/Forbidden"
+          "404":
+            $ref: "#/components/responses/NotFound"
+          "500":
+            $ref: "#/components/responses/InternalServerError"
+  /users/{username}/stream:
+    get:
+      operationId: getMyStream
+      tags: ["user actions"]
+      summary: Get the user's stream
+      description: |
+        Get the stream of the user (photos posted by other people) in reverse chronological order
+      parameters:
+        - $ref: "#/components/parameters/Username"
+      responses:
+        "201":
+          description: User's stream successfully obtained
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
+        "204":
+          description: There are no posts to show 
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts:
+    post:
+      operationId: uploadPhoto
+      tags: ["post actions"]
+      summary: Upload a photo
+      description: |
+        Upload a photo inserting it into the database
+      parameters:
+        - $ref: "#/components/parameters/Username"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              description: Photo to upload
+              type: string
+              format: binary
+              minLength: 8388608
+              maxLength: 268435456
+        required: true
+      responses:
+        "204":
+          description: "Photo uploaded successfully"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}:
+    delete:
+      operationId: deletePhoto
+      tags: ["post actions"]
+      summary: Delete a photo
+      description: |
+        Delete a photo uploaded
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
+      responses:
+        "204":
+          description: "Photo deleted successfully"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/follows/{followname}:
+    put:
+      security: []
+      operationId: followUser
+      tags: ["follow actions"]
+      summary: Follow a user
+      description: |
+        Follow a user
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/Username"
+      responses:
+        "204":
+          description: User followed successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: unfollowUser
+      tags: ["follow actions"]
+      summary: Unfollow a user
+      description: |
+        Unfollow a user
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/Username"
+      responses:
+        "204":
+          description: User unfollowed successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/bans/{banname}:
+    put:
+      operationId: banUser
+      tags: ["ban actions"]
+      summary: Ban a user
+      description: |
+        Ban a user
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/Username"
+      responses:
+        "204":
+          description: User banned successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: unbanUser
+      tags: ["ban actions"]
+      summary: Unban a user
+      description: |
+        Unban a user
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/Username"
+      responses:
+        "204":
+          description: User unbanned successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/likes:
+    put:
+      operationId: likePhoto
+      tags: ["like actions"]
+      summary: Like a photo
+      description: |
+        Like a photo
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
+      responses:
+        "204":
+          description: Photo liked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: unikePhoto
+      tags: ["like actions"]
+      summary: Unlike a photo
+      description: |
+        Unlike a photo
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/comments:
+    post:
+      operationId: commentPhoto
+      tags: ["comment actions"]
+      summary: Comment a photo
+      description: |
+        Comment a photo
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: uncommentPhoto
+      tags: ["comment actions"]
+      summary: Uncomment a photo
+      description: |
+        Uncomment a photo
+      parameters:
+        - $ref: "#/components/parameters/Username"
+        - $ref: "#/components/parameters/PostID"
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"

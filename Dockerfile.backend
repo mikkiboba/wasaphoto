@@ -1,0 +1,26 @@
+# specify parent image
+FROM golang:1.19.1 AS builder
+
+# specify a working directory
+WORKDIR /src/
+
+# copy Go code (copy source files)
+COPY . .
+
+# build executables (add dependencies to image)
+RUN go build -o /app/webapi ./cmd/webapi
+
+# create final container
+FROM debian:bullseye
+
+# expose the used port
+EXPOSE 3000 4000
+
+# change working directory
+WORKDIR /app/
+
+# copy the build executable from the builder image
+COPY --from=builder /app/webapi ./
+
+# executable command
+CMD ["/app/webapi"]
