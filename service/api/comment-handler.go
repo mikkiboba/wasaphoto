@@ -150,8 +150,7 @@ func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httpro
 	var tComments []Comment
 
 	for _, comment := range comments {
-		var rComment Comment
-		rComment = FromDatabaseComment(comment)
+		rComment := FromDatabaseComment(comment)
 		rComment.User, err = rt.db.GetUsername(rComment.User)
 		if err != nil {
 			rt.baseLogger.WithError(err).Error("Error while trying to get the username")

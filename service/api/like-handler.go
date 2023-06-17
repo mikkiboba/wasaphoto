@@ -219,7 +219,7 @@ func (rt *_router) getLike(w http.ResponseWriter, r *http.Request, ps httprouter
 	if err != nil {
 		rt.baseLogger.WithError(err).Error("Error encoding")
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
-	return
 
 }
