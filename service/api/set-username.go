@@ -36,7 +36,6 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 		return
 	}
 
-
 	// Start the transaction
 	StartTransaction(rt, w)
 

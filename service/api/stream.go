@@ -86,5 +86,4 @@ func (rt *_router) getPosts(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-
 }

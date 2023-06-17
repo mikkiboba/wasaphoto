@@ -59,5 +59,5 @@ func FromDatabaseComment(comment database.Comment) Comment {
 }
 
 type Status struct {
-	State bool `json:"status"` 
+	State bool `json:"status"`
 }

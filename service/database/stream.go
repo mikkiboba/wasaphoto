@@ -59,7 +59,6 @@ func (db *appdbimpl) GetStream(followingList []string) ([]Post, error) {
 
 }
 
-
 func (db *appdbimpl) GetPosts(uid string) ([]Post, error) {
 
 	var posts []Post

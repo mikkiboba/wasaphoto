@@ -33,5 +33,5 @@ func (db *appdbimpl) UnlikePhoto(uid string, pid string) error {
 func (db *appdbimpl) CheckLike(uid string, pid string) (bool, error) {
 	var res int
 	err := db.c.QueryRow(`SELECT COUNT(*) FROM likes WHERE postid = ? AND userliking = ?`, pid, uid).Scan(&res)
-	return res>0, err
+	return res > 0, err
 }

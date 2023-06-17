@@ -18,7 +18,6 @@ It needs the username of the user posting the photo in the parameters and the fi
 */
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-
 	rt.baseLogger.Info("Uploading...")
 
 	// Start the transaction
@@ -84,7 +83,6 @@ func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httpro
 		return
 	}
 	defer file.Close()
-
 
 	// Create the file which is going to be saved in the directory
 	imgFile, err := os.Create(rt.postPath + pid.String())
@@ -204,7 +202,6 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 	defer file.Close()
-
 
 	w.Header().Set("Content-Type", "image/*")
 	_, err = io.Copy(w, file)

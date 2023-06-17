@@ -1,10 +1,10 @@
 package api
 
 import (
+	"database/sql"
+	"encoding/json"
 	"errors"
 	"net/http"
-	"encoding/json"
-	"database/sql"
 
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/api/reqcontext"
 	"git.sapienzaapps.it/fantasticcoffee/fantastic-coffee-decaffeinated/service/database"
@@ -126,7 +126,6 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-
 	Commit(rt, w)
 
 	// No content (204) -> the operation was successful
@@ -204,7 +203,6 @@ func (rt *_router) unbanUser(w http.ResponseWriter, r *http.Request, ps httprout
 	rt.baseLogger.Info("User unbanned successfully")
 }
 
-
 /*
 Handler of the operation GET for the route /users/:username/bans/:banname
 */
@@ -225,7 +223,7 @@ func (rt *_router) getBan(w http.ResponseWriter, r *http.Request, ps httprouter.
 		rt.baseLogger.WithError(err).Error("There is an error while getting the banned user's token")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-	} 
+	}
 
 	isBanned, err := rt.db.CheckBan(userbanning, userbanned)
 	if err != nil {

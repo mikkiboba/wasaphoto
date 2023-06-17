@@ -115,7 +115,7 @@ func (rt *_router) uncomment(w http.ResponseWriter, r *http.Request, ps httprout
 	// Uncomment the photo
 	StartTransaction(rt, w)
 
-	rt.baseLogger.Info(uid,pid,cid)
+	rt.baseLogger.Info(uid, pid, cid)
 
 	err = rt.db.Uncomment(uid, pid, cid)
 	if errors.Is(err, database.ErrElementNotDeleted) {
@@ -149,7 +149,7 @@ func (rt *_router) getComments(w http.ResponseWriter, r *http.Request, ps httpro
 
 	var tComments []Comment
 
-	for _,comment := range comments {
+	for _, comment := range comments {
 		var rComment Comment
 		rComment = FromDatabaseComment(comment)
 		rComment.User, err = rt.db.GetUsername(rComment.User)

@@ -74,7 +74,7 @@ type AppDatabase interface {
 	Comment(string, string, string) error   // Comment a post
 	Uncomment(string, string, string) error // Uncomment a comment
 	DeleteCommentsBan(string, string) error // Delete all the comments after a ban
-	CheckLike(string, string) (bool,error)
+	CheckLike(string, string) (bool, error)
 
 	// EXTRA
 
@@ -83,10 +83,10 @@ type AppDatabase interface {
 
 	// Transaction handling
 
-	StartTransaction() error // Start the transaction
-	Commit() error           // Commit the transaction
-	Rollback() error         // Rollback the transaction
-	GetPosts(string) ([]Post, error) // Get the list of posts of a user
+	StartTransaction() error               // Start the transaction
+	Commit() error                         // Commit the transaction
+	Rollback() error                       // Rollback the transaction
+	GetPosts(string) ([]Post, error)       // Get the list of posts of a user
 	GetComments(string) ([]Comment, error) // Get the list of comments of a post
 
 	Ping() error
@@ -103,7 +103,7 @@ type Post struct {
 }
 
 type Comment struct {
-	Id string
+	Id   string
 	User string
 	Text string
 }
