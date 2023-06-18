@@ -40,7 +40,7 @@ func (rt *_router) Handler() http.Handler {
 	// Special routes
 	rt.router.GET("/liveness", rt.liveness)
 
-	//EXTRA
+	// EXTRA
 	rt.router.GET("/posts/:postid", rt.wrap(rt.checkAuthorization(rt.getPhoto)))
 	rt.router.GET("/users", rt.wrap(rt.checkAuthorization(rt.getUsers)))
 	rt.router.GET("/users/:username/bans/:banname", rt.wrap(rt.checkAuthorization(rt.getBan)))
