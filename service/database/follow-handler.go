@@ -60,5 +60,8 @@ func (db *appdbimpl) GetFollowingList(uid string) ([]string, error) {
 		}
 		followingList = append(followingList, followed)
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return followingList, nil
 }

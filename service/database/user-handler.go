@@ -82,5 +82,8 @@ func (db *appdbimpl) GetUsers(prefix string, user string) ([]string, error) {
 	if len(users) == 0 {
 		return nil, sql.ErrNoRows
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return users, err
 }

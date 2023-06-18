@@ -31,6 +31,9 @@ func (db *appdbimpl) GetStream(followingList []string) ([]Post, error) {
 	if len(posts) == 0 {
 		return nil, sql.ErrNoRows
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
 	for index := range posts {
 		// Get the number of likes
@@ -77,6 +80,9 @@ func (db *appdbimpl) GetPosts(uid string) ([]Post, error) {
 	}
 	if len(posts) == 0 {
 		return nil, sql.ErrNoRows
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
 	for index := range posts {
