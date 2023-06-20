@@ -71,6 +71,9 @@ components:
       description: User's auth token. Also used as the identifier
       minLength: 36
       maxLength: 36
+    CommentID:
+      type: integer
+      example: 1
     ErrorMsg:
       description: Error message
       type: string
@@ -169,6 +172,13 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/Username"
+    CommentID:
+      name: commentid
+      in: path
+      description: the id of the post's comment
+      required: true
+      schema:
+        $ref: "#/components/schemas/CommentID"
 
 security:
   - BearerAuth: []
@@ -293,8 +303,12 @@ paths:
               maxLength: 268435456
         required: true
       responses:
-        "204":
+        "201":
           description: "Photo uploaded successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostID"
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
@@ -420,12 +434,21 @@ paths:
       description: |
         Comment a photo
       responses:
-        "204":
+        "201":
           description: Photo unliked successfully
+          content:
+            application/json:
+              $ref: "#/components/schemas/CommentID"
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
+    
+  /users/{username}/posts/{postid}/comments/{commentid}:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
+      - $ref: "#/components/parameters/CommentID"
     delete:
       operationId: uncommentPhoto
       tags: ["comment actions"]
