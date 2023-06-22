@@ -5,22 +5,22 @@ info:
   description: |
     API for the project submitted for the WASA course.
     Users can log in, register, upload photos, comment photos, like photos, follow each other and ban each other.
-    Github link : [...]
+    Github link : https://github.com/mikkiboba/wasaphotohw.git
 tags:
   - name: login actions
     description: login and registration
   - name: user actions
-    description: change username, get the profile info, get the stream
+    description: done by the user
   - name: post actions
-    description: upload and delete a photo
-  - name: follow actions
-    description: follow and unfollow a user
-  - name: ban actions
-    description: ban and unban a user
+    description: interactions with the posts
   - name: like actions
-    description: like and unlike a photo
+    description: interaction with likes
   - name: comment actions
-    description: comment and uncomment a photo
+    description: interaction with comments
+  - name: follow actions
+    description: follow/unfollow
+  - name: ban actions
+    description: ban/unban
 components:
   securitySchemes:
     BearerAuth:
@@ -194,7 +194,7 @@ paths:
         If not, it registrates the user adding the username into the database.
         It returns the authorization token.
       requestBody:
-        description: User's username
+        description: The user's username
         content:
           application/json:
             schema:
@@ -202,13 +202,13 @@ paths:
         required: true
       responses:
         "200":
-          description: User successfully logged in
+          description: User logged in
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Token"
         "201":
-          description: User successfully registered
+          description: User registered and logged in
           content:
             application/json:
               schema:
@@ -218,51 +218,51 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}:
-      parameters:
-        - $ref: "#/components/parameters/Username"
-      put:
-        operationId: setMyUserName
-        tags: ["user actions"]
-        summary: Change the user's username
-        description: |
-          Set a new username for the user if it's not already taken.
-        requestBody:
-          description: User's username
+    parameters:
+      - $ref: "#/components/parameters/Username"
+    put:
+      operationId: setMyUsername
+      tags: ["user actions"]
+      summary: Change the user's username
+      description: |
+        Set a new username for the user if it's not already taken.
+      requestBody:
+        description: The new username
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Username"
+        required: true
+      responses:
+        "204":
+          description: Username update successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    get:
+      operationId: getUserProfile
+      tags: ["user actions"]
+      summary: Get the user's profile info
+      description: |
+        Get the info about the user's profile.
+      responses:
+        "200":
+          description: User's info successfully obtained
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Username"
-          required: true
-        responses:
-          "204":
-            description: Username updated successfully
-          "400":
-            $ref: "#/components/responses/BadRequest"
-          "409":
-            $ref: "#/components/responses/Conflict"          
-          "500":
-            $ref: "#/components/responses/InternalServerError"
-      get:
-        operationId: getUserProfile
-        tags: ["user actions"]
-        summary: Get the user's profile info
-        description: |
-          Get the info about the user's profile.
-        responses:
-          "200":
-            description: User's info successfully obtained
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/UserInfo"
-          "400":
-            $ref: "#/components/responses/BadRequest"
-          "403":
-            $ref: "#/components/responses/Forbidden"
-          "404":
-            $ref: "#/components/responses/NotFound"
-          "500":
-            $ref: "#/components/responses/InternalServerError"
+                $ref: "#/components/schemas/UserInfo"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
   /users/{username}/stream:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -299,8 +299,8 @@ paths:
               description: Photo to upload
               type: string
               format: binary
-              minLength: 8388608
-              maxLength: 268435456
+              minLength: 1
+              maxLength: 10000
         required: true
       responses:
         "201":
@@ -314,18 +314,91 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
     delete:
       operationId: deletePhoto
       tags: ["post actions"]
       summary: Delete a photo
       description: |
         Delete a photo uploaded
-      parameters:
-        - $ref: "#/components/parameters/Username"
-        - $ref: "#/components/parameters/PostID"
       responses:
         "204":
           description: "Photo deleted successfully"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/likes:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
+    put:
+      operationId: likePhoto
+      tags: ["like actions"]
+      summary: Like a photo
+      description: |
+        Like a photo
+      responses:
+        "204":
+          description: Photo liked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: unlikePhoto
+      tags: ["like actions"]
+      summary: Unlike a photo
+      description: |
+        Unlike a photo
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/comments:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
+    post:
+      operationId: commentPhoto
+      tags: ["comment actions"]
+      summary: Comment a photo
+      description: |
+        Comment a photo
+      responses:
+        "201":
+          description: Photo unliked successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommentID"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /users/{username}/posts/{postid}/comments/{commentid}:
+    parameters:
+      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/PostID"
+      - $ref: "#/components/parameters/CommentID"
+    delete:
+      operationId: uncommentPhoto
+      tags: ["comment actions"]
+      summary: Uncomment a photo
+      description: |
+        Uncomment a photo
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /users/{username}/follows/{followname}:
@@ -385,79 +458,6 @@ paths:
       responses:
         "204":
           description: User unbanned successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /users/{username}/posts/{postid}/likes:
-    parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/PostID"
-    put:
-      operationId: likePhoto
-      tags: ["like actions"]
-      summary: Like a photo
-      description: |
-        Like a photo
-      responses:
-        "204":
-          description: Photo liked successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    delete:
-      operationId: unlikePhoto
-      tags: ["like actions"]
-      summary: Unlike a photo
-      description: |
-        Unlike a photo
-      responses:
-        "204":
-          description: Photo unliked successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-  /users/{username}/posts/{postid}/comments:
-    parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/PostID"
-    post:
-      operationId: commentPhoto
-      tags: ["comment actions"]
-      summary: Comment a photo
-      description: |
-        Comment a photo
-      responses:
-        "201":
-          description: Photo unliked successfully
-          content:
-            application/json:
-              $ref: "#/components/schemas/CommentID"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    
-  /users/{username}/posts/{postid}/comments/{commentid}:
-    parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/PostID"
-      - $ref: "#/components/parameters/CommentID"
-    delete:
-      operationId: uncommentPhoto
-      tags: ["comment actions"]
-      summary: Uncomment a photo
-      description: |
-        Uncomment a photo
-      responses:
-        "204":
-          description: Photo unliked successfully
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
