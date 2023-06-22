@@ -3,7 +3,7 @@ import { Comment } from 'vue'
 import ErrorMsg from '../components/ErrorMsg.vue'
 
 
-    export default (await import('vue')).defineComponent({
+    export default{
     data: function () {
         return {
             username: localStorage.getItem("username"),
@@ -60,7 +60,7 @@ import ErrorMsg from '../components/ErrorMsg.vue'
         this.getPhoto();
     },
     components: { Comment }
-})
+}
 
 
 </script>

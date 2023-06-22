@@ -1,6 +1,6 @@
 <script>
 
-    export default (await import('vue')).defineComponent({
+    export default{
         data: function () {
             return {
                 errormsg: null,
@@ -44,7 +44,7 @@
         mounted() {
             this.$root.logIn()
         }
-    })
+    }
 
 </script>
 

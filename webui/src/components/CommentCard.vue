@@ -1,36 +1,36 @@
 <script>
 
-  export default (await import('vue')).defineComponent({
-          props: {
-              comment: Object,
-              photoid: String,
-              supera: Object
-          },
-          data: function () {
-            return {
-              errormsg: null,
-              isOwner: null
-            }
-          },
-          methods: {
-            deleteComment: async function() {
-              this.errormsg = null
-              try {
-                let res = await this.$axios.delete(`/users/${localStorage.getItem("username")}/posts/${this.photoid}/comments/${this.comment.id}`)
-                this.supera.loadComments()
-              } catch (err) {
-                this.errormsg = err.toString()
-              }
-            }
-          },
-          mounted() {
-            if (this.comment.user === localStorage.getItem("username")) {
-              this.isOwner = true
-            } else {
-              this.isOwner = false
-            }
-          }
-  })
+  export default{
+    props: {
+        comment: Object,
+        photoid: String,
+        supera: Object
+    },
+    data: function () {
+      return {
+        errormsg: null,
+        isOwner: null
+      }
+    },
+    methods: {
+      deleteComment: async function() {
+        this.errormsg = null
+        try {
+          let res = await this.$axios.delete(`/users/${localStorage.getItem("username")}/posts/${this.photoid}/comments/${this.comment.id}`)
+          this.supera.loadComments()
+        } catch (err) {
+          this.errormsg = err.toString()
+        }
+      }
+    },
+    mounted() {
+      if (this.comment.user === localStorage.getItem("username")) {
+        this.isOwner = true
+      } else {
+        this.isOwner = false
+      }
+    }
+  }
 
 </script>
 

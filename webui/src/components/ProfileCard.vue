@@ -1,6 +1,6 @@
 <script>
 
-    export default (await import('vue')).defineComponent({
+    export default{
         props: {
             profile: Object,
             isOwner: Boolean,
@@ -48,7 +48,7 @@
             this.$router.push("/settings")
           }
         }
-    })
+    }
 
 </script>
 

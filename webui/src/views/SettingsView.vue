@@ -1,6 +1,6 @@
 <script>
 
-    export default (await import('vue')).defineComponent({
+    export default{
         data: function() {
             return {
                 errormsg: null,
@@ -38,7 +38,7 @@
 				}
 			}
         }
-    })
+    }
 
 </script>
 

@@ -1,6 +1,6 @@
 <script>
 
-    export default ((await import('vue')).defineComponent({
+    export default{
         props: {
             post: Object,
             home: Boolean
@@ -81,7 +81,7 @@
             } else { this.owner = false }
             this.getPhoto()
         }
-    }))
+    }
 
 </script>
 

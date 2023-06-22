@@ -1,6 +1,6 @@
 <script>
 
-    export default (await import('vue')).defineComponent({
+    export default{
         props: {
             username: String,
         },
@@ -12,7 +12,7 @@
                 this.$router.push(`/users/${this.username}`)
             }
         }
-    })
+    }
 
 </script>
 
