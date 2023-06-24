@@ -73,6 +73,7 @@ components:
       maxLength: 36
     CommentID:
       type: integer
+      description: Comment's id
       example: 1
     ErrorMsg:
       description: Error message
