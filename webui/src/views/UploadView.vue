@@ -49,8 +49,6 @@
 </script>
 
 <template>
-
-    <link rel="stylesheet" href="./src/assets/style.css">
     <br>
 
     <div class="container-fluid row col-md-9 ms-sm-auto col-lg-10 px-md-2">

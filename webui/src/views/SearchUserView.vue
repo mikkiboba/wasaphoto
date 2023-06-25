@@ -38,7 +38,6 @@
 </script>
 <template>
 
-    <link href="../style/style.css" rel="stylesheet">
     <br>
     <div class="container-fluid row col-md-9 ms-sm-auto col-lg-10 px-md-2">
         <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>

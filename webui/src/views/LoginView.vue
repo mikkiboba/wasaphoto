@@ -44,8 +44,6 @@
 </script>
 
 <template>
-	<link href="../assets/style.css" rel="stylesheet">
-
 	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
 
 

@@ -53,9 +53,6 @@
 </script>
 
 <template>
-
-    <link href="../assets/style.css" rel="stylesheet">
-
     <section class="py-5 text-center container bg-light rounded-5 shadow">
       <div class="row py-lg-5">
         <div class="col-lg-3 col-md-8 mx-auto">
