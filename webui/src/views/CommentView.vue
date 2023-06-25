@@ -1,5 +1,4 @@
 <script>
-import { Comment } from 'vue'
 import ErrorMsg from '../components/ErrorMsg.vue'
 
 
