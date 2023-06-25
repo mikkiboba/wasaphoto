@@ -8,7 +8,7 @@ import (
 func (rt *_router) Handler() http.Handler {
 
 	// Session routes
-	rt.router.POST("/session", rt.wrap(rt.login))
+	rt.router.POST("/session", rt.wrap(rt.doLogin))
 
 	// User routes
 	rt.router.PUT("/users/:username", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.setMyUsername))))

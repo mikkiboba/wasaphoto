@@ -15,7 +15,7 @@ Handler of the route POST for the path /session.
 Get the username from the input json and returns the uuid as a json. The uuid is the authorization token.
 If the username is not in the database it will create a new user with that username and generate a new uuid.
 */
-func (rt *_router) login(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
+func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	rt.baseLogger.Info("Starting login")
 
