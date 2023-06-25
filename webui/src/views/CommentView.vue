@@ -84,7 +84,7 @@ import ErrorMsg from '../components/ErrorMsg.vue'
                 <label class="form-label ownunderline" for="addANote" @click="addComment()">+ Add a comment</label>
                 </div>
 
-                <CommentCard v-for="comment in comments" v-bind:comment="comment" v-bind:photoid="this.photoid" v-bind:supera="this"></CommentCard>
+                <CommentCard v-for="comment in comments" v-bind:comment="comment" v-bind:key="comment" v-bind:photoid="this.photoid" v-bind:supera="this"></CommentCard>
             </div>
         </div>
   </div>
