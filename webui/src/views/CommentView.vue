@@ -31,9 +31,10 @@ import ErrorMsg from '../components/ErrorMsg.vue'
         addComment: async function () {
             this.errormsg = null;
             try {
-                await this.$axios.post(`/users/${this.username}/posts/${this.photoid}/comments`, {
-                    comment: this.commentText
-                })
+                if(this.commentText.length > 0)
+                    await this.$axios.post(`/users/${this.username}/posts/${this.photoid}/comments`, {
+                        comment: this.commentText
+                    })
                 this.commentText = ""
                 this.loadComments()
             }
