@@ -59,7 +59,6 @@ import ErrorMsg from '../components/ErrorMsg.vue'
         this.photoid = this.$route.params.post;
         this.getPhoto();
     },
-    components: { Comment }
 }
 
 
