@@ -30,8 +30,8 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.DELETE("/users/:username/bans/:banname", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unbanUser))))
 
 	// Like routes
-	rt.router.PUT("/posts/:postid/likes/:userliking", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.likePhoto))))
-	rt.router.DELETE("/posts/:postid/likes/:userliking", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unlikePhoto))))
+	rt.router.PUT("/posts/:postid/likes/:username", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.likePhoto))))
+	rt.router.DELETE("/posts/:postid/likes/:username", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.unlikePhoto))))
 
 	// Comment routes
 	rt.router.POST("/users/:username/posts/:postid/comments", rt.wrap(rt.checkAuthorization(rt.checkUser(rt.comment))))
@@ -46,7 +46,7 @@ func (rt *_router) Handler() http.Handler {
 	rt.router.GET("/users/:username/bans/:banname", rt.wrap(rt.checkAuthorization(rt.getBan)))
 	rt.router.GET("/users/:username/follows/:followname", rt.wrap(rt.checkAuthorization(rt.checkFollow)))
 	rt.router.GET("/users/:username/posts", rt.wrap(rt.checkAuthorization(rt.getPosts)))
-	rt.router.GET("/users/:username/posts/:postid/likes", rt.wrap(rt.checkAuthorization(rt.getLike)))
+	rt.router.GET("/posts/:postid/likes/:username", rt.wrap(rt.checkAuthorization(rt.getLike)))
 	rt.router.GET("/posts/:postid/comments", rt.wrap(rt.getComments))
 
 	return rt.router

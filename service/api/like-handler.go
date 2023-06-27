@@ -17,7 +17,7 @@ Handler of the operation PUT for the route /users/:username/posts/:postid/likes
 func (rt *_router) likePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Get the username of the user liking the photo from the parameters
-	username := ps.ByName("userliking")
+	username := ps.ByName("username")
 
 	// Get the post id from the parameters
 	postID := ps.ByName("postid")
@@ -103,7 +103,7 @@ Handler of the operation DELETE for the route /users/:username/posts/:postid/lik
 func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
 	// Get the username of the user unliking the photo from the parameters
-	username := ps.ByName("userliking")
+	username := ps.ByName("username")
 
 	// Get the post id from the parameters
 	postID := ps.ByName("postid")
@@ -185,7 +185,7 @@ func (rt *_router) unlikePhoto(w http.ResponseWriter, r *http.Request, ps httpro
 
 func (rt *_router) getLike(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	// Get the username of the user unliking the photo from the parameters
+	// Get the username of the user liking the photo from the parameters
 	username := ps.ByName("username")
 
 	// Get the post id from the parameters

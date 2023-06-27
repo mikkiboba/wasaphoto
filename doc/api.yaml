@@ -173,13 +173,6 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/Username"
-    UserLiking:
-      name: userliking
-      in: path
-      description: the username of the user liking the post
-      required: true
-      schema: 
-        $ref: "#/components/schemas/Username"
     CommentID:
       name: commentid
       in: path
@@ -436,10 +429,10 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /posts/{postid}/likes/{userliking}:
+  /posts/{postid}/likes/{username}:
     parameters:
       - $ref: "#/components/parameters/PostID"
-      - $ref: "#/components/parameters/UserLiking"
+      - $ref: "#/components/parameters/Username"
     put:
       operationId: likePhoto
       tags: ["like actions"]

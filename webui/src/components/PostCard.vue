@@ -33,7 +33,7 @@
             },
             likePhoto: async function() {
                 try {
-                    await this.$axios.put(`/users/${localStorage.getItem("username")}/posts/${this.photoid}/likes`)
+                    await this.$axios.put(`/posts/${this.photoid}/likes/${localStorage.getItem("username")}`)
                     this.checkLike()
                 } catch (err) {
                     this.errormsg = err.toString()
@@ -41,7 +41,7 @@
             },
             unlikePhoto: async function() {
                 try {
-                    await this.$axios.delete(`/users/${localStorage.getItem("username")}/posts/${this.photoid}/likes`)
+                    await this.$axios.delete(`/posts/${this.photoid}/likes/${localStorage.getItem("username")}`)
                     this.checkLike()
                 } catch (err) {
                     this.errormsg = err.toString()
@@ -49,7 +49,7 @@
             },
             checkLike: async function() {
                 try{
-                    let res = await this.$axios.get(`/users/${localStorage.getItem("username")}/posts/${this.photoid}/likes`)
+                    let res = await this.$axios.get(`/posts/${this.photoid}/likes/${localStorage.getItem("username")}`)
                     if (res.status === 200 && res.data.status === true) {
                         this.liked = true
                     } else {
