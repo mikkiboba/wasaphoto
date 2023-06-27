@@ -97,7 +97,7 @@
                 <img v-if="!liked && !owner" class="like" height="32" width="32" src="/like.png" @click="likePhoto()">
                 <img v-if="owner" class="like" height="32" width="32" src="/bin.png" @click="deletePhoto()">
                 <img v-else-if="liked && !owner" class="like" height="32" width="32" src ="/like-2.png" @click="unlikePhoto()">
-                &nbsp
+                &nbsp;
                 <img class="comment" height="32" width="32" src="/comment.png" @click="commentButton()">
               </div>
               <small class="text-muted">{{ date }} {{ hour }}</small>
