@@ -27,9 +27,6 @@
                 try {
                     let formData = new FormData() 
                     formData.append('file', this.image)
-                    for (let i of formData.entries()){
-                        console.log(i[0], ',', i[1])
-                    }
                     await this.$axios.post(`/users/${localStorage.getItem("username")}/posts`, formData, {
                         headers: {
                             "Content-Type": "multipart/form-data"

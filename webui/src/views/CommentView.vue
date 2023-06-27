@@ -18,7 +18,7 @@ import ErrorMsg from '../components/ErrorMsg.vue'
             this.errormsg = null;
             try {
                 let res = await this.$axios.get(`/posts/${this.photoid}`, {
-                    responseType: "arraybuffer"
+                    responseType: 'arraybuffer'
                 });
                 let blob = new Blob([res.data]);
                 this.photo = URL.createObjectURL(blob);
