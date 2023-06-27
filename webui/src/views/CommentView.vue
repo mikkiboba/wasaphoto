@@ -11,25 +11,25 @@ import ErrorMsg from '../components/ErrorMsg.vue'
             errormsg: null,
             commentText: null,
             comments: null
-        };
+        }
     },
     methods: {
         getPhoto: async function () {
-            this.errormsg = null;
+            this.errormsg = null
             try {
                 let res = await this.$axios.get(`/posts/${this.photoid}`, {
                     responseType: 'arraybuffer'
-                });
-                let blob = new Blob([res.data]);
-                this.photo = URL.createObjectURL(blob);
-                this.loadComments();
+                })
+                let blob = new Blob([res.data])
+                this.photo = URL.createObjectURL(blob)
+                this.loadComments()
             }
             catch (err) {
-                this.errormsg = err.toString();
+                this.errormsg = err.toString()
             }
         },
         addComment: async function () {
-            this.errormsg = null;
+            this.errormsg = null
             try {
                 if(this.commentText.length > 0)
                     await this.$axios.post(`/users/${this.username}/posts/${this.photoid}/comments`, {
@@ -39,25 +39,25 @@ import ErrorMsg from '../components/ErrorMsg.vue'
                 this.loadComments()
             }
             catch (err) {
-                this.errormsg = err.toString();
+                this.errormsg = err.toString()
             }
         },
         loadComments: async function () {
             try {
-                let res = await this.$axios.get(`/posts/${this.photoid}/comments`);
+                let res = await this.$axios.get(`/posts/${this.photoid}/comments`)
                 this.comments = res.data
             }
             catch (err) {
-                this.errormsg = err.toString();
+                this.errormsg = err.toString()
             }
         },
         back: async function () {
-            this.$router.back();
+            this.$router.back()
         }
     },
     mounted() {
-        this.photoid = this.$route.params.post;
-        this.getPhoto();
+        this.photoid = this.$route.params.post
+        this.getPhoto()
     },
 }
 

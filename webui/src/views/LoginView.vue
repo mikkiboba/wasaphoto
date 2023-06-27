@@ -10,23 +10,22 @@
 		},
 		methods: {
 			doLogin: async function() {
-				this.errormsg = null;
+				this.errormsg = null
 				try {
 					if (this.username == null || this.username.localeCompare("") == 0) {
-						this.errormsg = "Your credentials are not valid!";
-						return;
+						this.errormsg = "Your credentials are not valid!"
+						return
 					}
-					this.err = this.username;
+					this.err = this.username
 					let res = await this.$axios.post("/session", {
 						username: this.username
-					});
-					localStorage.setItem('username', this.username);
-					localStorage.setItem('token', res.data.token);
-					this.$root.logIn();
-					this.$router.push("/home");
+					})
+					localStorage.setItem('username', this.username)
+					localStorage.setItem('token', res.data.token)
+					this.$root.logIn()
+					this.$router.push("/home")
 				} catch (err) {
-				this.errormsg = err.toString();
-				this.err = "ciao";
+					this.errormsg = err.toString()
 			  	}
 			},
 			checkInput: async function() {

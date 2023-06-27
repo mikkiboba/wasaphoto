@@ -16,7 +16,7 @@
                     let res = await this.$axios.get(`/users?username=${this.searchBox}`)
                     res.data.forEach(user => {
                         this.userslist.push(user)
-                    });
+                    })
                 } else {
                     this.errormsg = "Search query must be at least 3 characters long"
                 }
