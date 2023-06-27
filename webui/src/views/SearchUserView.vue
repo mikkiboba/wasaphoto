@@ -48,7 +48,7 @@
                 Search username: <input v-on:input="searchNew" v-model="searchBox"  class="rounded-3" type="text" id="search" name="search" placeholder="Username">
             </section>
             <br><br><br>
-            <ProfileSearchCard v-for="user in userslist" v-bind:key="user" :username="user"></ProfileSearchCard>
+            <ProfileSearchCard v-for="user in userslist" v-bind:key="user" v-bind:username="user"></ProfileSearchCard>
 
         </main>
     </div>
