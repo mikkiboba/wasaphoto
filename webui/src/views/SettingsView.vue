@@ -17,7 +17,7 @@
                         username: this.newUsername
                     })
                     localStorage.setItem("username", this.newUsername)
-                    this.$router.back()
+                    this.$router.push(`/users/${localStorage.getItem("username")}`)
                 } catch (err) {
                     this.errormsg = err.toString()
                     if (err.response.status === 409) {
