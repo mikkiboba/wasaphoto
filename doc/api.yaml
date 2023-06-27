@@ -173,6 +173,13 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/Username"
+    UserLiking:
+      name: userliking
+      in: path
+      description: the username of the user liking the post
+      required: true
+      schema: 
+        $ref: "#/components/schemas/Username"
     CommentID:
       name: commentid
       in: path
@@ -432,7 +439,7 @@ paths:
   /posts/{postid}/likes/{userliking}:
     parameters:
       - $ref: "#/components/parameters/PostID"
-      - $ref: "#/components/parameters/Username"
+      - $ref: "#/components/parameters/UserLiking"
     put:
       operationId: likePhoto
       tags: ["like actions"]
