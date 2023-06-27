@@ -329,40 +329,6 @@ paths:
           description: "Photo deleted successfully"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /users/{username}/posts/{postid}/likes:
-    parameters:
-      - $ref: "#/components/parameters/Username"
-      - $ref: "#/components/parameters/PostID"
-    put:
-      operationId: likePhoto
-      tags: ["like actions"]
-      summary: Like a photo
-      description: |
-        Like a photo
-      responses:
-        "204":
-          description: Photo liked successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-    delete:
-      operationId: unlikePhoto
-      tags: ["like actions"]
-      summary: Unlike a photo
-      description: |
-        Unlike a photo
-      responses:
-        "204":
-          description: Photo unliked successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
   /users/{username}/posts/{postid}/comments:
     parameters:
       - $ref: "#/components/parameters/Username"
@@ -461,5 +427,39 @@ paths:
           description: User unbanned successfully
         "400":
           $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /posts/{postid}/likes/{userliking}:
+    parameters:
+      - $ref: "#/components/parameters/PostID"
+      - $ref: "#/components/parameters/Username"
+    put:
+      operationId: likePhoto
+      tags: ["like actions"]
+      summary: Like a photo
+      description: |
+        Like a photo
+      responses:
+        "204":
+          description: Photo liked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      operationId: unlikePhoto
+      tags: ["like actions"]
+      summary: Unlike a photo
+      description: |
+        Unlike a photo
+      responses:
+        "204":
+          description: Photo unliked successfully
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "403":
+          $ref: "#/components/responses/Forbidden"
         "500":
           $ref: "#/components/responses/InternalServerError"
