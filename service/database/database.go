@@ -70,6 +70,7 @@ type AppDatabase interface {
 
 	LikePhoto(string, string) error   // Like a photo
 	UnlikePhoto(string, string) error // Unlike a photo
+	DeleteLikesBan(string, string) error // Delete all the likes after a ban
 
 	Comment(string, string, string) error   // Comment a post
 	Uncomment(string, string, string) error // Uncomment a comment

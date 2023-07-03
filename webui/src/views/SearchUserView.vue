@@ -18,7 +18,7 @@
                         this.userslist.push(user)
                     })
                 } else {
-                    this.errormsg = "Search query must be at least 3 characters long"
+                    this.errormsg = "Search query must be at least 4 characters long"
                 }
             } catch (err) {
                 this.errormsg = "Can't find the user"

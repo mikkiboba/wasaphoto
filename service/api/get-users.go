@@ -36,6 +36,4 @@ func (rt *_router) getUsers(w http.ResponseWriter, r *http.Request, ps httproute
 		return
 	}
 
-	rt.baseLogger.Info("Operation completed successfully")
-
 }

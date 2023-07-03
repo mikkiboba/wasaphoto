@@ -35,3 +35,19 @@ func (db *appdbimpl) CheckLike(uid string, pid string) (bool, error) {
 	err := db.c.QueryRow(`SELECT COUNT(*) FROM likes WHERE postid = ? AND userliking = ?`, pid, uid).Scan(&res)
 	return res > 0, err
 }
+
+func (db *appdbimpl) DeleteLikesBan(uid string, bid string) error {
+	// Get the list of posts
+	posts, err := db.GetStream([]string{uid})
+	if err != nil {
+		return err
+	}
+
+	for index := range posts {
+		_, err := db.c.Exec(`DELETE FROM likes WHERE postid = ? AND userliking = ?`, posts[index].PostID, bid)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

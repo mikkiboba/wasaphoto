@@ -208,6 +208,4 @@ func (rt *_router) getPhoto(w http.ResponseWriter, r *http.Request, ps httproute
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	rt.baseLogger.Info("Photo sent succesfully")
 }

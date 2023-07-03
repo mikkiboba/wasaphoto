@@ -3,7 +3,8 @@
     export default{
         data: function() {
             return {
-                errormsg: null,
+                errormsg1: null,
+                errormsg2: null,
                 currentUsername: localStorage.getItem("username"),
                 newUsername: null,
                 disableButton: null
@@ -21,20 +22,31 @@
                 } catch (err) {
                     this.errormsg = err.toString()
                     if (err.response.status === 409) {
-                        this.errormsg = "The username is already taken"
+                        this.errormsg1 = "The username is already taken"
                     } else if (err.response.status === 400) {
-                        this.errormsg = "The username is not valid"
+                        this.errormsg1 = "The username is not valid"
                     }
                 }
             },
             checkInput: async function() {
 				let res = !!this.newUsername.match(/^[a-z0-9]+$/i)
-				if (!res){
-					this.errormsg = "The username is not valid"
-                    this.disableButton = true
+				let l_check = this.newUsername.length < 4
+
+				if(!res) {
+					this.errormsg1 = "The username is not valid"
+					this.disableButton = true
 				} else {
-					this.errormsg = null
-                    this.disableButton = false
+					this.errormsg1 = null
+				}
+				if(l_check) {
+					this.errormsg2 = "The username should at least be 4 characters long"
+					this.disableButton = true
+				} else {
+					this.errormsg2 = null
+				}
+
+				if (res && !l_check) {
+					this.disableButton = false
 				}
 			}
         }
@@ -49,7 +61,8 @@
 
 
     <div class="container-fluid row col-md-9 ms-sm-auto col-lg-10 px-md-2">
-        <ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+        <ErrorMsg v-if="errormsg1" :msg="errormsg1"></ErrorMsg>
+        <ErrorMsg v-if="errormsg2" :msg="errormsg2"></ErrorMsg>
         <div class="container bg-light rounded-5 shadow w-50 text-center">
             <h2 class="fw-light">Change Username</h2>
             <br>

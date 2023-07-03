@@ -126,6 +126,24 @@ func (rt *_router) banUser(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
+	// Delete all likes on the user's posts
+	err = rt.db.DeleteLikesBan(uid, bid)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		rt.baseLogger.WithError(err).Error("There is an error while deleting all the likes of the banned user")
+		w.WriteHeader(http.StatusInternalServerError)
+		Rollback(rt, w)
+		return
+	}
+
+	// Delete all likes from the other side
+	err = rt.db.DeleteLikesBan(bid, uid)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		rt.baseLogger.WithError(err).Error("There is an error while deleting all the likes of the banning user")
+		w.WriteHeader(http.StatusInternalServerError)
+		Rollback(rt, w)
+		return
+	}
+
 	Commit(rt, w)
 
 	// No content (204) -> the operation was successful
