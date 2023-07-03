@@ -17,8 +17,6 @@ If the username is not in the database it will create a new user with that usern
 */
 func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	rt.baseLogger.Info("Starting login")
-
 	// Getting the username from the input json
 	var username Username
 	err := json.NewDecoder(r.Body).Decode(&username)
@@ -30,7 +28,6 @@ func (rt *_router) doLogin(w http.ResponseWriter, r *http.Request, ps httprouter
 		return
 	}
 
-	rt.baseLogger.Warn(len(username.Username))
 	// Checking if the username is valid
 	if !username.isValid() {
 		rt.baseLogger.Warning("The username is not valid this one")

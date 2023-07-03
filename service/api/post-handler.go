@@ -18,8 +18,6 @@ It needs the username of the user posting the photo in the parameters and the fi
 */
 func (rt *_router) uploadPhoto(w http.ResponseWriter, r *http.Request, ps httprouter.Params, ctx reqcontext.RequestContext) {
 
-	rt.baseLogger.Info("Uploading...")
-
 	// Start the transaction
 	StartTransaction(rt, w)
 

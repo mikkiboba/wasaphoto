@@ -70,7 +70,6 @@ func (rt *_router) comment(w http.ResponseWriter, r *http.Request, ps httprouter
 	// Comment the photo
 	StartTransaction(rt, w)
 
-	rt.baseLogger.Info(text)
 	err = rt.db.Comment(uid, pid, text.Text)
 	if errors.Is(err, database.ErrElementNotAdded) {
 		rt.baseLogger.WithError(err).Error("There is an error with the insert of the comment into the database. Maybe the user or the post doesn't exist")
@@ -114,8 +113,6 @@ func (rt *_router) uncomment(w http.ResponseWriter, r *http.Request, ps httprout
 
 	// Uncomment the photo
 	StartTransaction(rt, w)
-
-	rt.baseLogger.Info(uid, pid, cid)
 
 	err = rt.db.Uncomment(uid, pid, cid)
 	if errors.Is(err, database.ErrElementNotDeleted) {
