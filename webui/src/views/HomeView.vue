@@ -40,7 +40,7 @@
         </div>
 
         <div class="text-center">
-            <div v-if="stream == null">
+            <div v-if="stream.length < 1 || stream == null">
                 No posts
             </div>
             <div v-else>

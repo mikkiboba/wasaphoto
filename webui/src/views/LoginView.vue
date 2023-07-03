@@ -1,8 +1,11 @@
 <script>
+import { getTransitionRawChildren } from 'vue'
+
 	export default{
 		data: function() {
 			return {
-				errormsg: null,
+				errormsg1: null,
+				errormsg2: null,
 				err: null,
 				username: null,
 				disableButton: null
@@ -30,20 +33,33 @@
 			},
 			checkInput: async function() {
 				let res = !!this.username.match(/^[a-z0-9]+$/i)
-				if (!res){
-					this.errormsg = "The username is not valid"
+				let l_check = this.username.length < 4
+
+				if(!res) {
+					this.errormsg1 = "The username is not valid"
 					this.disableButton = true
 				} else {
-					this.errormsg = null
+					this.errormsg1 = null
+				}
+				if(l_check) {
+					this.errormsg2 = "The username should at least be 4 characters long"
+					this.disableButton = true
+				} else {
+					this.errormsg2 = null
+				}
+
+				if (res && !l_check) {
 					this.disableButton = false
 				}
+				
 			}
 		}
 	}
 </script>
 
 <template>
-	<ErrorMsg v-if="errormsg" :msg="errormsg"></ErrorMsg>
+	<ErrorMsg v-if="errormsg1" :msg="errormsg1"></ErrorMsg>
+	<ErrorMsg v-if="errormsg2" :msg="errormsg2"></ErrorMsg>
 
 
 	<main class="form-signin w-100 m-auto text-center">
