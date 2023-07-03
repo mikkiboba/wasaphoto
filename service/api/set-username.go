@@ -19,8 +19,7 @@ func (rt *_router) setMyUsername(w http.ResponseWriter, r *http.Request, ps http
 	// Get the - current - username from the parameters
 	username := ps.ByName("username")
 	username = strings.ReplaceAll(username, " ", "")
-	rt.baseLogger.Info(username)
-
+	
 	// Get the - new - username from the request body as a json
 	var un Username
 	err := json.NewDecoder(r.Body).Decode(&un)
